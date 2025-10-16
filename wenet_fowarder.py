@@ -65,6 +65,8 @@ async def process_packets():
             # Decode CBOR data
             try:
                 cbor_data = cbor2.loads(bytearray(packet['packet']))
+                # Add reporter callsign
+                cbor_data['reporter_id'] = args.callsign
                 # print("Decoded CBOR data:", cbor_data)
                 data_queue.put_nowait(cbor_data)
             except Exception as e:
@@ -79,6 +81,7 @@ async def main(args: argparse.Namespace):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument('--callsign', type=str, default='DEFAULT_CALLSIGN', help='Callsign for telemetry data')
     parser.add_argument('--port', type=int, default=55674, help='UDP port to listen on')
     args = parser.parse_args()
     asyncio.run(main(args))
