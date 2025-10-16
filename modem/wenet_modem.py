@@ -6,7 +6,6 @@ import time
 import argparse
 import logging
 import json
-from datetime import datetime, timezone
 import sys
 import cbor2
 
