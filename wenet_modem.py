@@ -14,8 +14,8 @@ def build_json_payload(payload: bytes) -> str:
     if len(payload) > 254:
         logger.error("Payload too long when building JSON")
         return ""
-    # payload = payload.ljust(254, b'\x00')
-    # assert(len(payload) == 254)
+    payload = payload.ljust(254, b'\x00')
+    assert(len(payload) == 254)
     return json.dumps({'type': 'WENET_TX_SEC_PAYLOAD',
                         'id': 55,
                         'repeats': 1,
