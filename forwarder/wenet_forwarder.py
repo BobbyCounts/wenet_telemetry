@@ -4,6 +4,7 @@ import udp_client
 import cbor2
 import json
 import aiohttp
+import os
 
 BATCH_SIZE = 15
 BATCH_TIMEOUT = 5 # seconds
@@ -81,7 +82,7 @@ async def main(args: argparse.Namespace):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--callsign', type=str, default='DEFAULT_CALLSIGN', help='Callsign for telemetry data')
+    parser.add_argument('--callsign', type=str, default=os.getenv('MYCALL', 'NO_CALLSIGN'), help='Callsign for telemetry data')
     parser.add_argument('--port', type=int, default=55674, help='UDP port to listen on')
     args = parser.parse_args()
     asyncio.run(main(args))
