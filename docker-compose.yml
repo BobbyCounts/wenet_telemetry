@@ -1,0 +1,19 @@
+
+x-common-variables: &common-variables
+  MYCALL: K5NBC
+
+services:
+  wenet_modem:
+    build: ./modem
+    restart: 'unless-stopped'
+    container_name: wenet_modem
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+    network_mode: host
+
+  wenet_forwarder:
+    build: ./forwarder
+    restart: 'unless-stopped'
+    network_mode: 'host'
+    environment:
+      <<: *common-variables

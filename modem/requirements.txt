@@ -1,3 +1,4 @@
+cbor2==5.7.0
 pyftdi==0.57.1
 pyserial==3.5
 pyusb==1.3.1
