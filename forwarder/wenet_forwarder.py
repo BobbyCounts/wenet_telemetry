@@ -32,6 +32,9 @@ async def send_data(data: list[dict]):
                     if resp.status >= 200 and resp.status < 300:
                         print(f"Successfully sent {len(data)} items, status={resp.status}")
                         break
+                    if resp.status == 400:
+                        print(f"Client error, not retrying. status={resp.status}, body={text}")
+                        break
                     else:
                         print(f"Failed to send data, status={resp.status}, body={text}")
             except Exception as e:
@@ -66,12 +69,13 @@ async def process_packets():
             # Decode CBOR data
             try:
                 cbor_data = cbor2.loads(bytearray(packet['packet']))
-                # Add reporter callsign
-                cbor_data['reporter_id'] = args.callsign
-                # print("Decoded CBOR data:", cbor_data)
-                data_queue.put_nowait(cbor_data)
             except Exception as e:
                 print(f"Error decoding CBOR data: {e}")
+                continue
+            # Add reporter callsign
+            cbor_data['reporter_id'] = args.callsign
+            # print("Decoded CBOR data:", cbor_data)
+            data_queue.put_nowait(cbor_data)
 
 async def main(args: argparse.Namespace):
     tasks = []
