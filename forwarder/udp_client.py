@@ -41,7 +41,7 @@ async def run_client(receive_queue, port):
     print("Starting UDP client")
     transport, protocol = await loop.create_datagram_endpoint(
         lambda: UDPClientProtocol(receive_queue, on_con_lost),
-        local_addr=('127.0.0.1', port)
+        local_addr=('0.0.0.0', port)
     )
     try:
         while True:

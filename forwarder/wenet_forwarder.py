@@ -64,11 +64,11 @@ async def process_packets():
     while True:
         packet = await packet_queue.get()
         packet = json.loads(packet.decode())
-
-        if(packet['type'] == 'WENET_TX_SEC_PAYLOAD' and packet['id'] == 55):
+    
+        if packet.get('type') == 'WENET' and packet.get('packet', [None, None])[0:2] == [3, 55]:
             # Decode CBOR data
             try:
-                cbor_data = cbor2.loads(bytearray(packet['packet']))
+                cbor_data = cbor2.loads(bytearray(packet['packet'][2:]))
             except Exception as e:
                 print(f"Error decoding CBOR data: {e}")
                 continue
@@ -87,6 +87,6 @@ async def main(args: argparse.Namespace):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--callsign', type=str, default=os.getenv('MYCALL', 'NO_CALLSIGN'), help='Callsign for telemetry data')
-    parser.add_argument('--port', type=int, default=55674, help='UDP port to listen on')
+    parser.add_argument('--port', type=int, default=55672, help='UDP port to listen on')
     args = parser.parse_args()
     asyncio.run(main(args))
